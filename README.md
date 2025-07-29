@@ -1,21 +1,45 @@
 # 🧠 Employee Salary Prediction
 
-A machine learning web application that predicts employee salaries based on experience using Linear Regression. Built with Python, Flask, and deployed via GitHub Pages.
+This project is a lightweight web-based application that predicts employee salaries based on age, education level, work class, hours per week, and gender. It's built with pure HTML, CSS, and JavaScript and requires **no backend server**.
 
-## 🚀 Project Features
+## 🚀 Features
 
-- Predict salaries from years of experience
-- Trained using `scikit-learn` Linear Regression
-- Simple Flask web app for input/output
-- Deployed via GitHub Pages with optional custom domain
+- Predicts salaries using a simple weighted formula.
+- Intuitive and responsive UI.
+- Client-side validation with animated error feedback.
+- Salary prediction is instantaneous with no data stored.
 
-## 🛠️ Tech Stack
+## 🧠 How It Works
 
-- Python 3
-- Flask
-- Pandas, NumPy
-- scikit-learn
-- HTML/CSS (basic frontend)
+The salary is predicted using the following weighted formula:
 
-## 📁 Project Structure
+salary = base + (age × coef1) + (education level × coef2) + (hours/week × coef3) + (workclass × coef4) + (gender × coef5)
+
+Each feature contributes linearly to the final prediction using hardcoded coefficients. This is just a simulation, not a trained machine learning model.
+
+## 📁 File Structure
+
+salarypredictor.html   # Main HTML file with embedded CSS and JS
+
+## 🛠️ How to Use
+
+1. Clone the repository:
+   git clone https://github.com/YOUR_USERNAME/salarypredictor.git
+   cd salarypredictor
+
+2. Open the HTML file in your browser:
+   open salarypredictor.html
+   or just double-click the file.
+
+3. Enter your details and click **Predict Salary**.
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+---
+
+⚠️ **Disclaimer**: This is a demo and does not reflect actual salary predictions or real-world models. It's intended for educational purposes only.
+
+
 
