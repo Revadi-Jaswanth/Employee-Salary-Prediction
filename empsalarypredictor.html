@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Employee Salary Prediction Demo</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    color: #f0f4f8;
+  }
+  h1 {
+    text-align: center;
+    color: #e3f2fd;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+  }
+  form {
+    background: #ffffff11;
+    padding: 2rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    backdrop-filter: blur(8px);
+  }
+  label {
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: block;
+    color: #e3f2fd;
+    text-shadow: 0 0 5px rgba(0,0,0,0.2);
+  }
+  input[type=number],
+  select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    font-size: 1rem;
+    border: 1.8px solid rgba(255 255 255 / 0.6);
+    border-radius: 6px;
+    background-color: rgba(255 255 255 / 0.15);
+    color: #f0f4f8;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 2.5rem;
+    background-image:
+      linear-gradient(45deg, transparent 50%, #82cfff 50%),
+      linear-gradient(135deg, #82cfff 50%, transparent 50%),
+      linear-gradient(to right, rgba(255,255,255,0.15), rgba(255,255,255,0.15));
+    background-position:
+      calc(100% - 20px) calc(1em + 2px),
+      calc(100% - 15px) calc(1em + 2px),
+      calc(100% - 25px) 0.5em;
+    background-size: 5px 5px, 5px 5px, 1px 1.5em;
+    background-repeat: no-repeat;
+  }
+  input[type=number]:focus,
+  select:focus {
+    outline: none;
+    border-color: #82cfff;
+    background-color: rgba(255 255 255 / 0.3);
+    box-shadow: 0 0 10px rgba(130,207,255,0.6);
+  }
+  select option {
+    color: #0f2027;
+    background: #fff;
+  }
+  small {
+    color: #cfd8dc;
+    font-weight: normal;
+  }
+  button {
+    margin-top: 1rem;
+    padding: 0.8rem 1.4rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background-color: #82cfff;
+    color: #0f2027;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(130,207,255,0.6);
+  }
+  button:hover,
+  button:focus {
+    background-color: #4a90e2;
+    color: #f0f4f8;
+    box-shadow: 0 6px 18px rgba(74,144,226,0.9);
+  }
+
+  /* Error message style */
+  .error-message {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    min-height: 1.2rem;
+  }
+  /* Input error border */
+  .input-error {
+    border-color: #ff6b6b !important;
+    background-color: rgba(255,107,107,0.1);
+    box-shadow: 0 0 6px rgba(255,107,107,0.6);
+  }
+
+  /* Shake animation for button */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+  .shake {
+    animation: shake 0.4s;
+  }
+
+  #result {
+    margin-top: 2rem;
+    padding: 1.3rem;
+    font-size: 1.25rem;
+    background: #d4edda;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    text-align: center;
+    color: #155724;
+    box-shadow: 0 0 8px rgb(40 167 69 / 0.3);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  #result.show {
+    opacity: 1;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 480px) {
+    body {
+      margin: 1rem;
+      padding: 1rem;
+    }
+    form {
+      padding: 1.5rem 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Employee Salary Prediction</h1>
+
+<form id="salaryForm" novalidate>
+  <div>
+    <label for="age">Age</label>
+    <input type="number" id="age" name="age" min="18" max="90" required value="30" />
+    <div class="error-message" aria-live="polite"></div>
+  </div>
+
+  <div>
+    <label for="education-level">Education Level</label>
+    <select id="education-level" name="education-level" required>
+      <option value="" disabled selected>Select your education</option>
+      <option value="LKG">LKG (Lower Kindergarten)</option>
+      <option value="UKG">UKG (Upper Kindergarten)</option>
+      <option value="Primary">Primary School</option>
+      <option value="Middle">Middle School</option>
+      <option value="HighSchool">High School</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Diploma">Diploma</option>
+      <option value="Bachelors">Bachelor's Degree</option>
+      <option value="Masters">Master's Degree</option>
+      <option value="Doctorate">Doctorate</option>
+    </select>
+    <div class="error-message" aria-live="polite"></div>
+  </div>
+
+  <div>
+    <label for="hours-per-week">Hours per Week</label>
+    <input type="number" id="hours-per-week" name="hours-per-week" min="1" max="100" required value="40" />
+    <div class="error-message" aria-live="polite"></div>
+  </div>
+
+  <div>
+    <label for="workclass">Workclass</label>
+    <select id="workclass" name="workclass" required>
+      <option value="Private">Private</option>
+      <option value="Self-emp-not-inc">Self-emp-not-inc</option>
+      <option value="Self-emp-inc">Self-emp-inc</option>
+      <option value="Federal-gov">Federal-gov</option>
+      <option value="Local-gov">Local-gov</option>
+      <option value="State-gov">State-gov</option>
+      <option value="Without-pay">Without-pay</option>
+      <option value="Never-worked">Never-worked</option>
+    </select>
+    <div class="error-message" aria-live="polite"></div>
+  </div>
+
+  <div>
+    <label for="gender">Gender</label>
+    <select id="gender" name="gender" required>
+      <option value="0">Male</option>
+      <option value="1">Female</option>
+    </select>
+    <div class="error-message" aria-live="polite"></div>
+  </div>
+
+  <button type="submit" id="submitBtn">Predict Salary</button>
+</form>
+
+<div id="result" aria-live="polite" role="alert"></div>
+
+<script>
+  function predictSalary(features) {
+    const baseSalary = 20000;
+    const coefAge = 800;
+    const coefEducation = 2500;
+    const coefHours = 600;
+    const coefWorkclass = 3000;
+    const coefGender = -2000;
+
+    let salary = baseSalary;
+    salary += coefAge * features.age;
+    salary += coefEducation * features.educationNum;
+    salary += coefHours * features.hoursPerWeek;
+    salary += coefWorkclass * features.workclass;
+    salary += coefGender * features.gender;
+
+    if (salary < 20000) salary = 20000;
+    if (salary > 150000) salary = 150000;
+
+    return salary;
+  }
+
+  // Map education strings to numbers for prediction
+  const educationMapping = {
+    'LKG': 1,
+    'UKG': 2,
+    'Primary': 3,
+    'Middle': 4,
+    'HighSchool': 5,
+    'Intermediate': 6,
+    'Diploma': 7,
+    'Bachelors': 10,
+    'Masters': 13,
+    'Doctorate': 16
+  };
+
+  // Map workclass strings to numbers for prediction
+  function workclassMapping(value) {
+    switch(value) {
+      case 'Private': return 0;
+      case 'Self-emp-not-inc': return 1;
+      case 'Self-emp-inc': return 2;
+      case 'Federal-gov': return 3;
+      case 'Local-gov': return 4;
+      case 'State-gov': return 5;
+      case 'Without-pay': return 6;
+      case 'Never-worked': return 7;
+      default: return 0;
+    }
+  }
+
+  const form = document.getElementById('salaryForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultDiv = document.getElementById('result');
+
+  function validateInput(input) {
+    const errorDiv = input.nextElementSibling; // error message div after input/select
+    let valid = true;
+    let message = '';
+
+    if (!input.validity.valid) {
+      valid = false;
+      if (input.validity.valueMissing) {
+        message = 'This field is required.';
+      } else if (input.validity.rangeUnderflow) {
+        message = `Value must be at least ${input.min}.`;
+      } else if (input.validity.rangeOverflow) {
+        message = `Value must be at most ${input.max}.`;
+      } else {
+        message = 'Invalid input.';
+      }
+    }
+
+    if (!valid) {
+      input.classList.add('input-error');
+      errorDiv.textContent = message;
+    } else {
+      input.classList.remove('input-error');
+      errorDiv.textContent = '';
+    }
+    return valid;
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Validate all inputs
+    const inputs = form.querySelectorAll('input, select');
+    let allValid = true;
+    inputs.forEach(input => {
+      if (!validateInput(input)) {
+        allValid = false;
+      }
+    });
+
+    if (!allValid) {
+      // Shake the button to indicate error
+      submitBtn.classList.remove('shake'); // restart animation if needed
+      void submitBtn.offsetWidth; // trigger reflow
+      submitBtn.classList.add('shake');
+      resultDiv.style.display = 'none';
+      resultDiv.classList.remove('show');
+      return;
+    }
+
+    // Gather values after validation
+    const eduSelect = document.getElementById('education-level');
+    const educationNum = educationMapping[eduSelect.value] || 10;
+
+    const features = {
+      age: Number(document.getElementById('age').value),
+      educationNum: educationNum,
+      hoursPerWeek: Number(document.getElementById('hours-per-week').value),
+      workclass: workclassMapping(document.getElementById('workclass').value),
+      gender: Number(document.getElementById('gender').value),
+    };
+
+    const predictedSalary = predictSalary(features);
+
+    resultDiv.textContent = `Predicted Salary: $${predictedSalary.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    resultDiv.style.display = 'block';
+
+    // Trigger fade-in animation
+    setTimeout(() => {
+      resultDiv.classList.add('show');
+    }, 10);
+  });
+
+  // Optional: live validation while typing/selecting
+  form.querySelectorAll('input, select').forEach(input => {
+    input.addEventListener('input', () => validateInput(input));
+    input.addEventListener('change', () => validateInput(input));
+  });
+</script>
+
+</body>
+</html>
+
