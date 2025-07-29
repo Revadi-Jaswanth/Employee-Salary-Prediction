@@ -24,7 +24,7 @@ salarypredictor.html   # Main HTML file with embedded CSS and JS
 ## 🛠️ How to Use
 
 1. Clone the repository:
-   git clone https://github.com/YOUR_USERNAME/salarypredictor.git
+   git clone https://github.com/Revadi-Jaswanth/salarypredictor.git
    cd salarypredictor
 
 2. Open the HTML file in your browser:
