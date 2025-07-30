@@ -2,6 +2,9 @@
 
 This project is a lightweight web-based application that predicts employee salaries based on age, education level, work class, hours per week, and gender. It's built with pure HTML, CSS, and JavaScript and requires **no backend server**.
 
+
+to access the website:- https://revadi-jaswanth.github.io/Employee-Salary-Prediction/
+
 ## 🚀 Features
 
 - Predicts salaries using a simple weighted formula.
